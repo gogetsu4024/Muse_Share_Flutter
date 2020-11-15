@@ -42,6 +42,13 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+  fonts:
+    - family: rabelo
+      fonts:
+        - asset: assets/font/rabelo.ttf
+    - family: veganstyle
+      fonts:
+        - asset: assets/font/veganstyle.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

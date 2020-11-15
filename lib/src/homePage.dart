@@ -14,49 +14,113 @@ class _HomePageState extends State<HomePage> {
   var cards = Data.getData;
 
 
+
   Widget _buildCard(Map<String, Object> card) => Card(
     clipBehavior: Clip.antiAlias,
 
     child: Column(
       children: [
         ListTile(
-          leading: Icon(Icons.arrow_drop_down_circle),
-          title:  Text(card['name']),
+          leading: Container(
+              width: 60.0,
+              height: 60.0,
+              decoration: new BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: new NetworkImage(
+                          card['imageLink'])
+                  )
+              )),
+          title:  Text(card['name'],style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
           subtitle: Text(
-            'Secondary Text',
-            style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            '29 minutes ago',
+            style: TextStyle(fontSize: 16,color: Colors.grey.withOpacity(0.6)),
+          ),
+          trailing: Icon(Icons.more_vert),
+        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              card['desc'],
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 17,color: Colors.black.withOpacity(0.8)),
+            ),
+          ),),
+        ListTile(
+          leading: Image.network(
+            card['songCover'],
+            fit: BoxFit.fill,
+          ),
+          title:  Text(card['songName'],style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
+          subtitle: Text(
+            '29 minutes ago',
+            style: TextStyle(fontSize: 16,color: Colors.grey.withOpacity(0.6)),
+          ),
+          trailing: Icon(Icons.cloud_download,size: 40,),
+        ),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Divider(
+                    thickness: 1,
+                  ),
+                ),
+              ),
+
+            ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-            style: TextStyle(color: Colors.black.withOpacity(0.6)),
-          ),
-        ),
-        ButtonBar(
-          alignment: MainAxisAlignment.start,
-          children: [
-            FlatButton(
-              textColor: const Color(0xFF6200EE),
-              onPressed: () {
-                // Perform some action
-              },
-              child: const Text('ACTION 1'),
-            ),
-            FlatButton(
-              textColor: const Color(0xFF6200EE),
-              onPressed: () {
-                // Perform some action
-              },
-              child: const Text('ACTION 2'),
-            ),
-          ],
-        ),
-        Image.network(
-          card['imageLink'],
-          fit: BoxFit.fill,
-        ),
+        Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text.rich(
+                  TextSpan(
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                    children: [
+                      WidgetSpan(
+                          child: Container(
+                            padding: EdgeInsets.only(right:5.0),
+                            child: Icon(Icons.thumb_up_alt_outlined),
+                          )
+                      ),
+                      TextSpan(
+                        text: 'Like',
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(padding: EdgeInsets.symmetric(horizontal: 50,vertical: 20)),
+                Text.rich(
+                  TextSpan(
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                    children: [
+                      WidgetSpan(
+                          child: Container(
+                            padding: EdgeInsets.only(right:5.0),
+                            child: Icon(Icons.comment),
+                          )
+                      ),
+                      TextSpan(
+                        text: 'Comment',
+                      ),
+                    ],
+                  ),
+                )
+
+              ],
+            )
+        )
       ],
     ),
   );

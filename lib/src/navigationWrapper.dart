@@ -35,15 +35,31 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.indigo[300],
-        title: const Text('BottomNavigationBar Sample'),
-      ),
+      appBar: _selectedIndex!=2?AppBar(
+        leading: Icon(Icons.library_music_outlined,color: Colors.black54,size: 28),
+        backgroundColor: Colors.white,
+        title: Image(
+          image: AssetImage('assets/social_hub.png',
+          ),
+        )
+        ,
+        actions: [
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Image(
+                image: AssetImage('assets/top-right-bar.png',
+                ),
+                height: 40,
+                width: 40,
+              )
+          ),
+        ],
+      ):null,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.indigo[300],
+        backgroundColor: Color(0xffD15573),
         unselectedItemColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -51,16 +67,16 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
+            icon: Icon(Icons.mail),
+            label: 'chat',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
+            icon: Icon(Icons.person),
+            label: 'profile',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
+        selectedItemColor: Colors.black54,
         onTap: _onItemTapped,
       ),
     );
