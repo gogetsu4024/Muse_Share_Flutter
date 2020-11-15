@@ -129,11 +129,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: ListView.builder(
-        itemCount: cards.length,
-        itemBuilder: (context, index) {
-          return _buildCard(cards[index]);
-        },
+      body:  Column(
+          children:[
+            Card(
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                leading: Image(
+                    fit: BoxFit.fill,
+                    image: AssetImage('assets/soundcloud.png',)
+                ),
+                title:  Text('Welcome to a whole new world of sound discovery. Select a track to start listening !'
+                    ,style: TextStyle(fontSize: 18,)),
+
+              ),
+            ),
+            Expanded(
+                child:ListView.builder(
+                  itemCount: cards.length,
+                  itemBuilder: (context, index) {
+                    return _buildCard(cards[index]);
+                  },
+                )
+            ),
+          ]
       ),
     );
   }

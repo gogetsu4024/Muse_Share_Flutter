@@ -21,5 +21,15 @@ class Data {
       'changeColor': Colors.green,
       'value': '\$7.809'
     },
+    {
+      'name': 'Sun_rise',
+      'songCover' : 'https://images.genius.com/3293b52f74445776ee86b144f8e580ee.1000x1000x1.jpg',
+      'imageLink': 'https://images.genius.com/3293b52f74445776ee86b144f8e580ee.1000x1000x1.jpg',
+      'desc': 'New single by Jorja Smith',
+      'songName': 'Jorja Smith - Blue Lights',
+      'changeValue': '+202.835',
+      'changeColor': Colors.green,
+      'value': '\$12.279',
+    },
   ];
 }
