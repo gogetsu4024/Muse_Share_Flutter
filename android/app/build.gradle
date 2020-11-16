@@ -34,11 +34,14 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "thealphamerc.flutter_login_signup"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField 'String', 'WONDERPUSH_CLIENT_ID', '"fac0f4512471ac63d33a1640ade03006231982c9"'
+        buildConfigField 'String', 'WONDERPUSH_CLIENT_SECRET', '"9a274817ce5bf561fc78883ac307d14f942a571d97c7621036e9a7dafdc1eed3"'
+        buildConfigField 'String', 'WONDERPUSH_SENDER_ID', '"275700409686"'
     }
 
     buildTypes {
