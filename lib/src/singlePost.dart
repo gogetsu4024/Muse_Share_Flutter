@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'data.dart';
-import 'singlePost.dart';
-class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+import 'Components/customProfileAppBar.dart';
+class SinglePostPage extends StatefulWidget {
+  var info;
+  SinglePostPage({Key key,@required this.info}) : super(key: key);
 
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _SinglePostPageeState createState() => _SinglePostPageeState();
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
-class _HomePageState extends State<HomePage> {
-  var cards = Data.getData;
+class _SinglePostPageeState extends State<SinglePostPage> {
+
 
 
 
   Widget _buildCard(Map<String, Object> card) =>
       GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SinglePostPage(info: card),
-            ),
-          );
-        },
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SinglePostPage(info: card),
+              ),
+            );
+          },
           child: Card(
             clipBehavior: Clip.antiAlias,
             child: Column(
@@ -153,28 +154,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: CustomProfileAppBar(route:'singlePost'),
       body:  Column(
           children:[
-            Card(
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                leading: Image(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/soundcloud.png',)
-                ),
-                title:  Text('Welcome to a whole new world of sound discovery. Select a track to start listening !'
-                    ,style: TextStyle(fontSize: 18,)),
-
-              ),
-            ),
-            Expanded(
-                child:ListView.builder(
-                  itemCount: cards.length,
-                  itemBuilder: (context, index) {
-                    return _buildCard(cards[index]);
-                  },
-                )
-            ),
+            _buildCard(widget.info),
           ]
       ),
     );
