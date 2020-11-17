@@ -33,7 +33,7 @@ class _CustomProfileAppBarState extends State<CustomProfileAppBar>{
         Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: widget.route=='profile'?IconButton(
-              icon: const Icon(Icons.more_vert,color: Colors.black,size: 26,),
+              icon: const Icon(Icons.more_vert,color: Colors.black,size: 26),
               tooltip: 'Show Snackbar',
               onPressed: () {
               },

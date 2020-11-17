@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'ImagePost.dart';
+import 'Models/ImagePost.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,17 +13,15 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-/// This is the private State class that goes with MyStatefulWidget.
 class _ProfilePageState extends State<ProfilePage> {
   String view = "grid"; // default view
 
 
   Future<List<ImagePost>> fetchAlbum() async {
-    final response = await http.get('http://jsonplaceholder.typicode.com/photos?_start=0&_limit=5');
+    final response = await http.get('http://jsonplaceholder.typicode.com/photos?_start=0&_limit=10');
     print(response);
     if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
+
       List<dynamic> body = jsonDecode(response.body);
       List<ImagePost> posts = body
           .map(
@@ -31,7 +29,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ).toList();
 
       return posts;
-      //return ImagePost.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -39,14 +36,10 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-
-
   Container buildUserPosts() {
     Future<List<ImagePost>> getPosts() async {
       List<ImagePost> posts = [];
       posts = await fetchAlbum();
-
-
       return posts;
     }
 
@@ -54,13 +47,8 @@ class _ProfilePageState extends State<ProfilePage> {
         child: FutureBuilder<List<ImagePost>>(
             future: getPosts(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container(
-                    alignment: FractionalOffset.center,
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: CircularProgressIndicator());
-              }
-              else if (view == "grid") {
+              if (snapshot.hasData){
+              if (view == "grid") {
                 // build the grid
                 return GridView.count(
                     crossAxisCount: 3,
@@ -77,39 +65,52 @@ class _ProfilePageState extends State<ProfilePage> {
               else if (view == "feed") {
                 return Column(
                     children: snapshot.data.map((ImagePost imagePost) {
-                      return GestureDetector(
-                        onDoubleTap: () => print(imagePost),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            CachedNetworkImage(
-                              imageUrl: imagePost.url,
-                              fit: BoxFit.fitWidth,
-                              placeholder: (context, url) =>
-                                  Image(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/soundcloud.png',)
-                                  ),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                            ),
-                            imagePost.id == 0
-                                ? Positioned(
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                child: Opacity(
-                                    opacity: 0.85,
-                                    child: FlareActor("assets/flare/Like.flr",
-                                      animation: "Like",
-                                    )),
-                              ),
-                            )
-                                : Container()
-                          ],
-                        ),
+                      return Card(
+                          child : Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20,horizontal: 10),
+                              child: GestureDetector(
+                                onDoubleTap: () => print(imagePost),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: <Widget>[
+                                    CachedNetworkImage(
+                                      imageUrl: imagePost.url,
+                                      fit: BoxFit.fitWidth,
+                                      placeholder: (context, url) =>
+                                          Image(
+                                              fit: BoxFit.fill,
+                                              image: AssetImage('assets/soundcloud.png',)
+                                          ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
+                                    imagePost.id == 0
+                                        ? Positioned(
+                                      child: Container(
+                                        width: 100,
+                                        height: 100,
+                                        child: Opacity(
+                                            opacity: 0.85,
+                                            child: FlareActor("assets/flare/Like.flr",
+                                              animation: "Like",
+                                            )),
+                                      ),
+                                    )
+                                        : Container()
+                                  ],
+                                ),
+                              )
+                          )
+
                       );
                     }).toList());
+              }
+              }
+              else {
+                return Container(
+                    alignment: FractionalOffset.center,
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: CircularProgressIndicator());
               }
             }
         )
@@ -207,9 +208,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
 
-  Widget _buildCard() => Container(
-      height: 500,
-      child:Container(
+  Widget _buildCard() =>
+      Expanded(
           child:  ListView(
             children: <Widget>[
               Card(
@@ -271,7 +271,6 @@ class _ProfilePageState extends State<ProfilePage> {
               buildUserPosts(),
             ],
           )
-      )
   );
 
   @override

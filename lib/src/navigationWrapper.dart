@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_login_signup/src/chat.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'homePage.dart';
 import 'profilePage.dart';
@@ -19,10 +20,7 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static  List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
+    ChatPage(),
     ProfilePage()
   ];
 
