@@ -1,17 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter_login_signup/src/Config/AppConfig.dart';
 import 'package:flutter_login_signup/src/Models/User.dart';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
+class UserWebService {
 
-var dio = new Dio();
-
-class WebService {
-
-  Future<User> login(var username, var password, BuildContext context) async {
+  Future<User> login(var username, var password) async {
     var params = {"username": username, "password": password};
 
     String url =AppConfig.URL_SIGNIN;

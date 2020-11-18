@@ -18,7 +18,7 @@ class User {
   int followingCount;
   int postsCount;
 
-
+  User();
   User.registerModel(this.username, this.user_firstName, this.user_lastName, this.user_email, this.user_password);
   User.relationUser({this.user_id, this.username, this.user_firstName, this.user_lastName, this.user_email, this.user_password, this.user_bio, this.profileImageUrl,
     this.isPrivate, this.isOnline, this.last_login, this.followersCount, this.followingCount, this.postsCount});

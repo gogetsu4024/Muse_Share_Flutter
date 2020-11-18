@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  WebService ws = new WebService();
+  UserWebService ws = new UserWebService();
   TextEditingController username;
   TextEditingController password;
 
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return InkWell(
         onTap: () async {
-          User user = await ws.login(username.text, password.text, context);
+          User user = await ws.login(username.text, password.text);
           if(user != null){
             Singleton _instance = Singleton.getState();
             _instance.logged_in_user = user;

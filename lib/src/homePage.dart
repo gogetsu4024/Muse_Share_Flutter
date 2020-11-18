@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_login_signup/src/Service/post_service.dart';
+import 'Models/Post.dart';
 import 'data.dart';
 import 'singlePost.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -17,6 +19,16 @@ class HomePage extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class _HomePageState extends State<HomePage> {
   var cards = Data.getData;
+  PostWebService service;
+  List<Post> posts;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    service = new PostWebService();
+    service.fetchPosts(1); // do something with this data
+  }
 
 
   Future<List<Comment>> getLikesApiCall() async {
