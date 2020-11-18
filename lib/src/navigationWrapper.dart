@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_login_signup/src/chat.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'homePage.dart';
+import 'profilePage.dart';
+import 'Components/customAppBar.dart';
+import 'Components/customProfileAppBar.dart';
 class NavigationWrapper extends StatefulWidget {
   NavigationWrapper({Key key}) : super(key: key);
 
@@ -16,14 +20,8 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static  List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    ChatPage(),
+    ProfilePage()
   ];
 
   void _onItemTapped(int index) {
@@ -35,26 +33,9 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex!=2?AppBar(
-        leading: Icon(Icons.library_music_outlined,color: Colors.black54,size: 28),
-        backgroundColor: Colors.white,
-        title: Image(
-          image: AssetImage('assets/social_hub.png',
-          ),
-        )
-        ,
-        actions: [
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Image(
-                image: AssetImage('assets/top-right-bar.png',
-                ),
-                height: 40,
-                width: 40,
-              )
-          ),
-        ],
-      ):null,
+      appBar: _selectedIndex!=2?
+      CustomAppBar():
+      CustomProfileAppBar(route: 'profile'),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
