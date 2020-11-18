@@ -170,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
       children: <Widget>[
         Text(
           number.toString(),
-          style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
         Container(
             margin: const EdgeInsets.only(top: 4.0),

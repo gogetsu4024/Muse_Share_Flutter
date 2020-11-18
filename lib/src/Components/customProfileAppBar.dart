@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_signup/src/Models/User.dart';
+import 'package:flutter_login_signup/src/Session/Singleton.dart';
 class CustomProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
 
-  var user;
   var route;
 
 
@@ -16,6 +17,18 @@ class CustomProfileAppBar extends StatefulWidget implements PreferredSizeWidget 
 
 
 class _CustomProfileAppBarState extends State<CustomProfileAppBar>{
+
+  Singleton _instance;
+  User user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _instance = Singleton.getState();
+    user = _instance.logged_in_user;
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -27,7 +40,7 @@ class _CustomProfileAppBarState extends State<CustomProfileAppBar>{
         title: Transform(
           // you can forcefully translate values left side using Transform
           transform:  Matrix4.translationValues(-20.0, 0.0, 0.0),
-          child: Text('Gogetsu_JS',style: TextStyle(color: Colors.black,fontFamily: 'rabelo',fontWeight: FontWeight.bold, fontSize: 20)),),
+          child: Text(user.username,style: TextStyle(color: Colors.black,fontFamily: 'rabelo',fontWeight: FontWeight.bold, fontSize: 20)),),
       backgroundColor: Colors.white,
       actions: [
         Padding(
