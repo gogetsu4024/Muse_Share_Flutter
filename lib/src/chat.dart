@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bubble/bubble.dart';
-
-
+import 'Models/Comment.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
 class ChatPage extends StatefulWidget {
   ChatPage({Key key, this.title}) : super(key: key);
 
@@ -13,6 +14,84 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+
+  Future<List<Comment>> getLikesApiCall() async {
+    final response = await http.get('https://jsonplaceholder.typicode.com/comments?_start=0&_limit=10');
+    print(response);
+    if (response.statusCode == 200) {
+
+      List<dynamic> body = jsonDecode(response.body);
+      List<Comment> posts = body
+          .map(
+            (dynamic item) => Comment.fromJson(item),
+      ).toList();
+      return posts;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+
+
+  Future<List<Comment>> getAllLikes() async {
+    List<Comment> comments = [];
+
+    comments = await getLikesApiCall();
+    return comments;
+  }
+
+  Widget _buildAllLikes(){
+    return FutureBuilder<List<Comment>>(
+        future: getAllLikes(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+                width: 400,
+                alignment: FractionalOffset.center,
+                child: CircularProgressIndicator());
+          }
+          else{
+            return Container(width : 400,child:ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _buildSingleLiker(snapshot.data[index]);              },
+            )
+            );
+          }
+        }
+        );
+  }
+  Widget _buildSingleLiker(Comment comment){
+    return ListTile(
+      leading: ClipOval(
+          child:Container(
+              width: 60,
+              height: 60,
+              child:CachedNetworkImage(
+                imageUrl: 'https://images.genius.com/00848f3bc658466a2cf7cde003aded38.500x500x1.jpg',
+                fit: BoxFit.fill,
+                placeholder: (context, url) =>
+                    Image(
+                        fit: BoxFit.fill,
+                        image: AssetImage('assets/user-placeholder.png')
+                    ),
+                errorWidget: (context, url, error) =>
+                    Icon(Icons.error),
+              )
+          )
+      ),
+      title:  Text('gogetsu',style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
+      subtitle: Text(
+        comment.email,
+        style: TextStyle(fontSize: 16,color: Colors.grey.withOpacity(0.6)),
+      ),
+      trailing: Icon(Icons.check_circle_outline),
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +163,10 @@ class _ChatPageState extends State<ChatPage> {
                     )
                 ),
                 Text('Conversations',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-
+                Divider(),
+                Expanded(
+                  child : _buildAllLikes(),
+                )
               ],
             )
         )
