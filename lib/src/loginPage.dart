@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_signup/src/Service/web_service.dart';
 import 'package:flutter_login_signup/src/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'navigationWrapper.dart';
 import 'Widget/bezierContainer.dart';
+import 'package:wonderpush_flutter/wonderpush_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -14,7 +16,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Widget _entryField(String title, {bool isPassword = false}) {
+  WebService ws = new WebService();
+  TextEditingController username;
+  TextEditingController password;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    username = new TextEditingController(text: 'Oussama_JS');
+    password = new TextEditingController(text: 'azerty');
+  }
+
+
+  Widget _entryField(String title, TextEditingController controller , {bool isPassword = false, value}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -28,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
             height: 10,
           ),
           TextField(
+              controller: controller,
               obscureText: isPassword,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -40,9 +56,13 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _submitButton() {
     return InkWell(
-        onTap: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => NavigationWrapper()));
+        onTap: () async {
+          int id = await ws.login(username.text, password.text, context);
+          await WonderPush.setUserId(id.toString());
+          if(id != -1){
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => NavigationWrapper()));
+          }
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -167,8 +187,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Email",),
-        _entryField("Password", isPassword: true),
+        _entryField("Email", username),
+        _entryField("Password", password, isPassword: true),
       ],
     );
   }
