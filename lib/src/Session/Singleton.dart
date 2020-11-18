@@ -7,7 +7,7 @@ class Singleton {
 
   User get logged_in_user => user;
   set logged_in_user(User user) {
-    user = user;
+    this.user = user;
   }
 
   factory Singleton() {

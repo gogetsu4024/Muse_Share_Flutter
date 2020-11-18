@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login_signup/src/Service/web_service.dart';
+import 'package:flutter_login_signup/src/Service/user_service.dart';
 import 'package:flutter_login_signup/src/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'Models/User.dart';
+import 'Session/Singleton.dart';
 import 'navigationWrapper.dart';
 import 'Widget/bezierContainer.dart';
 import 'package:wonderpush_flutter/wonderpush_flutter.dart';
@@ -57,9 +59,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return InkWell(
         onTap: () async {
-          int id = await ws.login(username.text, password.text, context);
-          await WonderPush.setUserId(id.toString());
-          if(id != -1){
+          User user = await ws.login(username.text, password.text, context);
+          if(user != null){
+            Singleton _instance = Singleton.getState();
+            _instance.logged_in_user = user;
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => NavigationWrapper()));
           }
