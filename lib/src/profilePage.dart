@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_login_signup/src/Config/AppConfig.dart';
 import 'Models/ImagePost.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
+
+import 'Models/User.dart';
+import 'Session/Singleton.dart';
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key}) : super(key: key);
-
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String view = "grid"; // default view
 
+  String view = "grid"; // default view
+  Singleton _instance;
+  User user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _instance = Singleton.getState();
+    user = _instance.logged_in_user;
+  }
 
   Future<List<ImagePost>> fetchAlbum() async {
     final response = await http.get('http://jsonplaceholder.typicode.com/photos?_start=0&_limit=10');
@@ -157,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
       children: <Widget>[
         Text(
           number.toString(),
-          style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
         Container(
             margin: const EdgeInsets.only(top: 4.0),
@@ -222,7 +235,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           CircleAvatar(
                             radius: 40.0,
                             backgroundColor: Colors.grey,
-                            backgroundImage: NetworkImage('https://s27389.pcdn.co/wp-content/uploads/2020/06/bitcoin-cryptocurrencies-perfect-hedge-covid-19-crisis.jpeg'),
+                            backgroundImage: NetworkImage(AppConfig.PROFILE_IMAGE_URL + user.profileImageUrl),
                           ),
                           Expanded(
                             flex: 1,
@@ -233,16 +246,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    buildStatColumn("posts", 5),
-                                    buildStatColumn("followers", 20),
-                                    buildStatColumn("following", 20),
+                                    buildStatColumn("posts", user.postsCount),
+                                    buildStatColumn("followers", user.followersCount),
+                                    buildStatColumn("following", user.followingCount),
                                   ],
                                 ),
                                 Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
-                                      buildProfileFollowButton()
+                                      Flexible(
+                                        child: buildProfileFollowButton(),
+                                      ),
                                     ]),
                               ],
                             ),
@@ -253,13 +268,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           alignment: Alignment.centerLeft,
                           padding: const EdgeInsets.only(top: 15.0),
                           child: Text(
-                            'Gogetsu',
+                            user.username,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )),
                       Container(
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.only(top: 1.0),
-                        child: Text('A wise man once said, don\'t talk to me if you don\'t like music'),
+                        child: Text(user.user_bio),
                       ),
                       Divider(),
                       buildImageViewButtonBar(),
