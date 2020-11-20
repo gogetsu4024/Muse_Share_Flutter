@@ -5,8 +5,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'Components/customProfileAppBar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'Config/AppConfig.dart';
 import 'Models/Comment.dart';
 import 'package:bubble/bubble.dart';
+
+import 'Models/Post.dart';
 
 class SinglePostPage extends StatefulWidget {
   var info;
@@ -123,7 +126,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
 
 
 
-  Widget _buildCard(Map<String, Object> card) =>
+  Widget _buildCard(Post card) =>
 
       Card(
         clipBehavior: Clip.antiAlias,
@@ -135,7 +138,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                       width: 60,
                       height: 60,
                       child:CachedNetworkImage(
-                        imageUrl: card['imageLink'],
+                        imageUrl: AppConfig.PROFILE_IMAGE_URL + card.user.profileImageUrl,
                         fit: BoxFit.fill,
                         placeholder: (context, url) =>
                             Image(
@@ -147,9 +150,9 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                       )
                   )
               ),
-              title:  Text(card['name'],style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
+              title:  Text(card.user.username,style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
               subtitle: Text(
-                '29 minutes ago',
+                card.date.toString(),
                 style: TextStyle(fontSize: 16,color: Colors.grey.withOpacity(0.6)),
               ),
               trailing: Icon(Icons.more_vert),
@@ -159,14 +162,14 @@ class _SinglePostPageeState extends State<SinglePostPage> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  card['desc'],
+                  card.description,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 17,color: Colors.black.withOpacity(0.8)),
                 ),
               ),),
             ListTile(
               leading: CachedNetworkImage(
-                imageUrl: card['songCover'],
+                imageUrl: AppConfig.TRACK_URL + card.iconUrl,
                 fit: BoxFit.fill,
                 placeholder: (context, url) =>
                     Image(
@@ -177,7 +180,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                     Icon(Icons.error),
               )
               ,
-              title:  Text(card['songName'],style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
+              title:  Text(card.trackName,style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
               subtitle: Container(
                   margin: EdgeInsets.only(top: 20),
                   child: Row(

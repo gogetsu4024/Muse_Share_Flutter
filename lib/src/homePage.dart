@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_login_signup/src/Config/AppConfig.dart';
 import 'package:flutter_login_signup/src/Service/post_service.dart';
 import 'Models/Post.dart';
 import 'data.dart';
@@ -11,6 +12,8 @@ import 'package:http/http.dart' as http;
 import 'player.dart';
 import 'miniPlayer.dart';
 import 'Models/items.dart';
+import 'Session/Singleton.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -27,18 +30,44 @@ class _HomePageState extends State<HomePage> {
   PostWebService service;
   List<Post> posts;
 
+  Singleton _instance;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _instance = Singleton.getState();
     service = new PostWebService();
-    // do something with this data : service.fetchPosts(4);
+    service.fetchPosts(_instance.logged_in_user.user_id);
     // do something with this data: service.fetchPostsForUser(4);
     // like a post , return bool : service.likePost(13, 4);
     // dislike a post , return bool : service.dislikePost(13, 4);
     // do something with this data : service.fetchCommentsForPost(15);
     // like a comment , return bool : service.likeComment(13, 4);
     // dislike a comment , return bool : service.dislikeComment(13, 4);
+  }
+  Widget _buildAllPosts(){
+    return FutureBuilder<List<Post>>(
+        future: service.fetchPosts(_instance.logged_in_user.user_id),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+                width: 400,
+                alignment: FractionalOffset.center,
+                child: CircularProgressIndicator());
+          }
+          else{
+            return Container(width : 400,child:ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _buildCard(snapshot.data[index]);
+                },
+            )
+            );
+          }
+        });
+
+
   }
 
 
@@ -134,7 +163,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildLikesPopUp(){
+  Widget _buildLikesPopUp(Post post){
     return GestureDetector(
         onTap: () {
           showDialog(
@@ -173,12 +202,12 @@ class _HomePageState extends State<HomePage> {
               });
         },
         child: Text(
-          '0 Likes',
+          post.likesCount.toString()+ ' Likes',
           style: TextStyle(fontSize: 16,color: Colors.blue.withOpacity(0.6)),
         ));
   }
 
-  Widget _buildCard(Map<String, Object> card) =>
+  Widget _buildCard(Post card) =>
       GestureDetector(
           onTap: () {
             Navigator.push(
@@ -198,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                           width: 60,
                           height: 60,
                           child:CachedNetworkImage(
-                            imageUrl: card['imageLink'],
+                            imageUrl: AppConfig.PROFILE_IMAGE_URL + card.user.profileImageUrl,
                             fit: BoxFit.fill,
                             placeholder: (context, url) =>
                                 Image(
@@ -210,9 +239,9 @@ class _HomePageState extends State<HomePage> {
                           )
                       )
                   ),
-                  title:  Text(card['name'],style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
+                  title:  Text(card.user.username,style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
                   subtitle: Text(
-                    '29 minutes ago',
+                    card.date.toString(),
                     style: TextStyle(fontSize: 16,color: Colors.grey.withOpacity(0.6)),
                   ),
                   trailing: Icon(Icons.more_vert),
@@ -222,14 +251,14 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      card['desc'],
+                      card.description,
                       textAlign: TextAlign.left,
                       style: TextStyle(fontSize: 17,color: Colors.black.withOpacity(0.8)),
                     ),
                   ),),
                 ListTile(
                   leading: CachedNetworkImage(
-                    imageUrl: card['songCover'],
+                    imageUrl: AppConfig.TRACK_URL + card.iconUrl,
                     fit: BoxFit.fill,
                     placeholder: (context, url) =>
                         Image(
@@ -240,16 +269,16 @@ class _HomePageState extends State<HomePage> {
                         Icon(Icons.error),
                   )
                   ,
-                  title:  Text(card['songName'],style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
+                  title:  Text(card.trackName,style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
                   subtitle: Container(
                       margin: EdgeInsets.only(top: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          _buildLikesPopUp(),
+                          _buildLikesPopUp(card),
                           Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
                           Text(
-                            '0 Comments',
+                            card.commentsCount.toString() + ' Comments',
                             style: TextStyle(fontSize: 16,color: Colors.blue.withOpacity(0.6)),
                           )
 
@@ -362,12 +391,7 @@ class _HomePageState extends State<HomePage> {
             )
             ,
             Expanded(
-                child:ListView.builder(
-                  itemCount: cards.length,
-                  itemBuilder: (context, index) {
-                    return _buildCard(cards[index]);
-                  },
-                )
+                child:_buildAllPosts()
             ),
           ]
       ),
