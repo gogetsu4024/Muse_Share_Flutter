@@ -4,6 +4,7 @@ class AppConfig{
   static String URL = "http://192.168.1.22:3000";
 
   static String URL_SIGNIN = URL + "/auth/login/";
+  static String URL_REGISTER = URL + "/user/";
 
   /* Post urls */
   static String URL_ALL_POSTS = URL + "/post/";

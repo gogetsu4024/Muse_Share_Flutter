@@ -105,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          Text('or',style: TextStyle(fontSize: 20, color: Colors.white)),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -230,9 +229,6 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         alignment: Alignment.centerRight,
-                        child: Text('Forgot Password ?',
-                            style: TextStyle(
-                                color:Colors.white,fontSize: 16, fontWeight: FontWeight.w500)),
                       ),
                       _divider(),
                       SizedBox(height: height * .055),

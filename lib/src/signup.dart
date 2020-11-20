@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_signup/src/Models/User.dart';
 import 'package:flutter_login_signup/src/Widget/bezierContainer.dart';
 import 'package:flutter_login_signup/src/loginPage.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'Service/user_service.dart';
+import 'Session/Singleton.dart';
+import 'navigationWrapper.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key, this.title}) : super(key: key);
@@ -13,6 +18,24 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  UserWebService ws = new UserWebService();
+  TextEditingController username;
+  TextEditingController firstName;
+  TextEditingController lastName;
+  TextEditingController email;
+  TextEditingController password;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    username = new TextEditingController(text : "Oussama_J");
+    firstName = new TextEditingController(text: "test user");
+    lastName = new TextEditingController(text: "test user");
+    password = new TextEditingController(text: "azerty");
+    email = new TextEditingController(text: "test@test.com");
+  }
+
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -34,7 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _entryField(String title, {bool isPassword = false}) {
+  Widget _entryField(String title, TextEditingController controller, {bool isPassword = false}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -48,6 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
             height: 10,
           ),
           TextField(
+              controller: controller,
               obscureText: isPassword,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -59,23 +83,34 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _submitButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 15),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.black54,
-                offset: Offset(2, 4),
-                blurRadius: 5,
-                spreadRadius: 2)
-          ],
-          color: Color(0xff1959a9)),
-      child: Text(
-        'Register Now',
-        style: TextStyle(fontSize: 20, color: Colors.white),
+    return InkWell(
+      onTap: () async {
+        User user = await ws.register(username.text, firstName.text, lastName.text, password.text, email.text);
+        if(user != null){
+          Singleton _instance = Singleton.getState();
+          _instance.logged_in_user = user;
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => NavigationWrapper()));
+        }
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.symmetric(vertical: 15),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.black54,
+                  offset: Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
+            color: Color(0xff1959a9)),
+        child: Text(
+          'Register Now',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
     );
   }
@@ -148,9 +183,11 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Username"),
-        _entryField("Email id"),
-        _entryField("Password", isPassword: true),
+        _entryField("Username", username),
+        _entryField("First name", firstName),
+        _entryField("Last name", lastName),
+        _entryField("Email", email),
+        _entryField("Password", password, isPassword: true),
       ],
     );
   }
@@ -181,17 +218,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: height * .2),
+                    SizedBox(height: height * .09),
                     _title(),
                     SizedBox(
-                      height: 50,
+                      height: 20,
                     ),
                     _emailPasswordWidget(),
                     SizedBox(
                       height: 20,
                     ),
                     _submitButton(),
-                    SizedBox(height: height * .14),
+                    SizedBox(height: height * .1),
                     _loginAccountLabel(),
                   ],
                 ),
