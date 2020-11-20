@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Container buildUserPosts() {
     return Container(
         child: FutureBuilder<List<Post>>(
-            future: service.fetchPosts(user.user_id),
+            future: service.fetchPostsForUser(user.user_id),
             builder: (context, snapshot) {
               if (snapshot.hasData){
               if (view == "grid") {
@@ -231,9 +231,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    buildStatColumn("posts", user.postsCount),
-                                    buildStatColumn("followers", user.followersCount),
-                                    buildStatColumn("following", user.followingCount),
+                                    buildStatColumn("posts", user.postsCount != null ? user.postsCount : 0),
+                                    buildStatColumn("followers", user.followersCount != null ? user.followersCount : 0),
+                                    buildStatColumn("following", user.followingCount != null ? user.followingCount : 0),
                                   ],
                                 ),
                                 Row(

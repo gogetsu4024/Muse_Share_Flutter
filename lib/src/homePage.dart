@@ -350,7 +350,7 @@ class _HomePageState extends State<HomePage> {
                     image: AssetImage('assets/soundcloud.png',)
                 ),
                 title:  Text('Welcome to a whole new world of sound discovery. Select a track to start listening !'
-                    ,style: TextStyle(fontSize: 18,)),
+                    ,style: TextStyle(fontSize: 16,)),
 
               ),
             ):
