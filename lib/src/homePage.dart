@@ -286,6 +286,10 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                           playing=true;
                           song.name=card.trackName;
+                          song.image=AppConfig.TRACK_URL + card.iconUrl;
+                          song.url= AppConfig.TRACK_URL + card.trackUrl;
+                          MiniAudioPlayer.songUrl = AppConfig.TRACK_URL + card.trackUrl;
+
                         });
                         /* Navigator.push(
                           context,

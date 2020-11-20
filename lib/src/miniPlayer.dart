@@ -41,6 +41,7 @@ class MiniAudioPlayer extends StatefulWidget {
 
   @override
   _MiniAudioPlayerState createState() => new _MiniAudioPlayerState();
+
 }
 
 class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
@@ -69,6 +70,7 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
   @override
   void initState() {
     super.initState();
+    print("yo");
     initAudioPlayer();
     _fetchSongDataFromWeb();
   }
@@ -105,6 +107,7 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
   }
 
   Future play() async {
+    _fetchSongDataFromWeb();
     await audioPlayer.play(newSongUrl);
     setState(() {
       playerState = PlayerState.playing;
