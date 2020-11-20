@@ -57,12 +57,12 @@ class _SinglePostPageeState extends State<SinglePostPage> {
           title: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
               child: Text(
-                  comment.email,
+                  comment.user.username,
                   style: TextStyle(fontSize: 16,fontFamily: 'rabelo',color: Colors.blue,fontWeight: FontWeight.bold)
               )),
           subtitle: Bubble(
             color: Color.fromRGBO(212, 234, 244, 1.0),
-            child: Text(comment.body, style: TextStyle(fontSize: 11.0)),
+            child: Text(comment.content, style: TextStyle(fontSize: 11.0)),
           ),
           leading: ClipOval(
               child:Container(
