@@ -24,15 +24,7 @@ class _CustomAppBarState extends State<CustomAppBar>{
       )
       ,
       actions: [
-        Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Image(
-              image: AssetImage('assets/top-right-bar.png',
-              ),
-              height: 40,
-              width: 40,
-            )
-        ),
+
       ],
     );
   }
