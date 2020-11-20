@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _HomePageState extends State<HomePage> {
-  Song song= new Song(category: "none", image: "https://i1.sndcdn.com/artworks-000245530126-40dfig-t500x500.jpg", name: "test", artist: 'test', url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+  Song song= new Song(category: "none", image: "https://i1.sndcdn.com/artworks-000245530126-40dfig-t500x500.jpg", name: "Cardi B is the bomb", artist: 'test', url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
   var playing =false;
   var cards = Data.getData;
   PostWebService service;
@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _instance = Singleton.getState();
     service = new PostWebService();
-    service.fetchPosts(_instance.logged_in_user.user_id);
     // do something with this data: service.fetchPostsForUser(4);
     // like a post , return bool : service.likePost(13, 4);
     // dislike a post , return bool : service.dislikePost(13, 4);
@@ -61,13 +60,11 @@ class _HomePageState extends State<HomePage> {
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
                 return _buildCard(snapshot.data[index]);
-                },
+              },
             )
             );
           }
         });
-
-
   }
 
 
@@ -121,8 +118,6 @@ class _HomePageState extends State<HomePage> {
             );
           }
         });
-
-
   }
   Widget _buildSingleLiker(Comment comment){
     return ListTile(
@@ -290,8 +285,13 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         setState(() {
                           playing=true;
+                          song.name=card.trackName;
+                          song.image=AppConfig.TRACK_URL + card.iconUrl;
+                          song.url= AppConfig.TRACK_URL + card.trackUrl;
+                          MiniAudioPlayer.songUrl = AppConfig.TRACK_URL + card.trackUrl;
+
                         });
-                       /* Navigator.push(
+                        /* Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => AudioApp(song),

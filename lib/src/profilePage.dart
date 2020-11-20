@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_login_signup/src/Config/AppConfig.dart';
+import 'package:flutter_login_signup/src/Models/Post.dart';
+import 'package:flutter_login_signup/src/singlePost.dart';
 import 'Models/ImagePost.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
-
+import 'package:flutter_login_signup/src/Service/post_service.dart';
 import 'Models/User.dart';
 import 'Session/Singleton.dart';
 class ProfilePage extends StatefulWidget {
@@ -21,44 +23,21 @@ class _ProfilePageState extends State<ProfilePage> {
   String view = "grid"; // default view
   Singleton _instance;
   User user;
+  PostWebService service;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    service = new PostWebService();
     _instance = Singleton.getState();
     user = _instance.logged_in_user;
   }
 
-  Future<List<ImagePost>> fetchAlbum() async {
-    final response = await http.get('http://jsonplaceholder.typicode.com/photos?_start=0&_limit=10');
-    print(response);
-    if (response.statusCode == 200) {
-
-      List<dynamic> body = jsonDecode(response.body);
-      List<ImagePost> posts = body
-          .map(
-            (dynamic item) => ImagePost.fromJson(item),
-      ).toList();
-
-      return posts;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
-  }
 
   Container buildUserPosts() {
-    Future<List<ImagePost>> getPosts() async {
-      List<ImagePost> posts = [];
-      posts = await fetchAlbum();
-      return posts;
-    }
-
     return Container(
-        child: FutureBuilder<List<ImagePost>>(
-            future: getPosts(),
+        child: FutureBuilder<List<Post>>(
+            future: service.fetchPosts(user.user_id),
             builder: (context, snapshot) {
               if (snapshot.hasData){
               if (view == "grid") {
@@ -71,23 +50,29 @@ class _ProfilePageState extends State<ProfilePage> {
                     crossAxisSpacing: 1.5,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    children: snapshot.data.map((ImagePost imagePost) {
-                      return GridTile(child: ImageTile(imagePost));
+                    children: snapshot.data.map((Post post) {
+                      return GridTile(child: ImageTile(post));
                     }).toList());
               }
               else if (view == "feed") {
                 return Column(
-                    children: snapshot.data.map((ImagePost imagePost) {
+                    children: snapshot.data.map((Post post) {
                       return Card(
                           child : Padding(
                               padding: EdgeInsets.symmetric(vertical: 20,horizontal: 10),
                               child: GestureDetector(
-                                onDoubleTap: () => print(imagePost),
+                                onDoubleTap: () => {Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SinglePostPage(info: post),
+                                  ),
+                                )
+                                },
                                 child: Stack(
                                   alignment: Alignment.center,
                                   children: <Widget>[
                                     CachedNetworkImage(
-                                      imageUrl: imagePost.url,
+                                      imageUrl: AppConfig.TRACK_URL + post.iconUrl,
                                       fit: BoxFit.fitWidth,
                                       placeholder: (context, url) =>
                                           Image(
@@ -97,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       errorWidget: (context, url, error) =>
                                           Icon(Icons.error),
                                     ),
-                                    imagePost.id == 0
+                                    post.id == 0
                                         ? Positioned(
                                       child: Container(
                                         width: 100,
@@ -282,8 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),),
-
-              buildUserPosts(),
+                buildUserPosts()
             ],
           )
   );
@@ -301,37 +285,23 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 class ImageTile extends StatelessWidget {
-  final ImagePost imagePost;
+  final Post post;
 
-  ImageTile(this.imagePost);
+  ImageTile(this.post);
 
   clickedImage(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute<bool>(builder: (BuildContext context) {
-      return Center(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text('Photo',
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold)),
-              backgroundColor: Colors.white,
-            ),
-            body: ListView(
-              children: <Widget>[
-                Container(
-                  child:
-                  Image.network(imagePost.url),
-                ),
-              ],
-            )),
-      );
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SinglePostPage(info: post),
+      ),
+    );
   }
 
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () => clickedImage(context),
-        child: Image.network(imagePost.url, fit: BoxFit.cover));
+        child: Image.network(AppConfig.TRACK_URL + post.iconUrl, fit: BoxFit.cover));
   }
 }
 
