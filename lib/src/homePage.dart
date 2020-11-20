@@ -27,8 +27,13 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     service = new PostWebService();
-    // do something with this data : service.fetchPosts(1);
+    // do something with this data : service.fetchPosts(4);
     // do something with this data: service.fetchPostsForUser(4);
+    // like a post , return bool : service.likePost(13, 4);
+    // dislike a post , return bool : service.dislikePost(13, 4);
+    // do something with this data : service.fetchCommentsForPost(15);
+    // like a comment , return bool : service.likeComment(13, 4);
+    // dislike a comment , return bool : service.dislikeComment(13, 4);
   }
 
 
@@ -106,7 +111,7 @@ class _HomePageState extends State<HomePage> {
       ),
       title:  Text('gogetsu',style: TextStyle(fontSize: 16,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
       subtitle: Text(
-        comment.email,
+        comment.user.username,
         style: TextStyle(fontSize: 14,color: Colors.grey.withOpacity(0.6)),
       ),
       trailing: Container(

@@ -1,20 +1,29 @@
-class Comment {
-  final int postId;
-  final int id;
-  final String name;
-  final String email;
-  final String body;
+import 'User.dart';
 
-  Comment({this.postId, this.id, this.name,this.email,this.body});
+class Comment {
+  int id;
+  String content;
+  DateTime date;
+  List<User> likes;
+  User user;
+  int likesCount;
+
+  Comment({this.id, this.content, this.date, this.likes, this.user, this.likesCount});
 
   factory Comment.fromJson(Map<String, dynamic> json) {
+    var likes = new List<User>();
+    if(json["likesCount"] as int > 0) {
+      likes =  List<User>.from(json["likes"].map(
+            (dynamic item) => User.fromJsonArray(item),
+      ));
+    }
     return Comment(
-      postId: json['postId'],
       id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      body: json['body'],
-
+      content: json['content'],
+      date: DateTime.parse(json["date"]),
+      likes: likes,
+      user: User.fromJsonArray(json["user"]),
+      likesCount: json['likesCount'],
     );
   }
 }

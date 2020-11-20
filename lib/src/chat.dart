@@ -84,7 +84,7 @@ class _ChatPageState extends State<ChatPage> {
       ),
       title:  Text('gogetsu',style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
       subtitle: Text(
-        comment.email,
+        comment.user.username,
         style: TextStyle(fontSize: 16,color: Colors.grey.withOpacity(0.6)),
       ),
       trailing: Icon(Icons.check_circle_outline),
