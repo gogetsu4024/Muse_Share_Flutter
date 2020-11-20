@@ -11,7 +11,6 @@ void main() {
   WonderPush.subscribeToNotifications();
 }
 class MyApp extends StatelessWidget {
-  Song song= new Song(category: "none", image: "https://i1.sndcdn.com/artworks-000245530126-40dfig-t500x500.jpg", name: "test", artist: 'test', url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

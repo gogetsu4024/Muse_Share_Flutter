@@ -8,6 +8,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'Models/Comment.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'player.dart';
+import 'miniPlayer.dart';
+import 'Models/items.dart';
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -18,6 +21,8 @@ class HomePage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _HomePageState extends State<HomePage> {
+  Song song= new Song(category: "none", image: "https://i1.sndcdn.com/artworks-000245530126-40dfig-t500x500.jpg", name: "test", artist: 'test', url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+  var playing =false;
   var cards = Data.getData;
   PostWebService service;
   List<Post> posts;
@@ -155,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Divider(thickness: 1.5),
                       Expanded(
-                      child : _buildAllLikes(),
+                        child : _buildAllLikes(),
                       )
                     ],
                   ),
@@ -246,7 +251,21 @@ class _HomePageState extends State<HomePage> {
                         ],
                       )
                   ),
-                  trailing: Icon(Icons.cloud_download,size: 40,),
+                  trailing: InkWell(
+                      child:Icon(Icons.cloud_download,size: 40,),
+                      onTap: () {
+                        setState(() {
+                          playing=true;
+                        });
+                       /* Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AudioApp(song),
+                          ),
+                        );*/
+                      }
+
+                  ),
                 ),
                 Container(
                   child: Row(
@@ -318,7 +337,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body:  Column(
           children:[
-            Card(
+            !playing ?Card(
               clipBehavior: Clip.antiAlias,
               child: ListTile(
                 leading: Image(
@@ -329,7 +348,14 @@ class _HomePageState extends State<HomePage> {
                     ,style: TextStyle(fontSize: 18,)),
 
               ),
-            ),
+            ):
+            Container(
+              padding: EdgeInsets.only(top: 20),
+              height: 124,
+              child: Card(child:MiniAudioPlayer(song))
+              ,
+            )
+            ,
             Expanded(
                 child:ListView.builder(
                   itemCount: cards.length,
