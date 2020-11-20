@@ -196,6 +196,7 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
             children: [
               new Stack(
                 children: <Widget>[
+                    Padding(padding: EdgeInsets.only(left: 7),child: Text(widget.name.length>10?widget.name.substring(0,10)+"...":widget.name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
                     new Container(
                       alignment: Alignment.bottomCenter,
                       padding: EdgeInsets.only(bottom: 0.0),
