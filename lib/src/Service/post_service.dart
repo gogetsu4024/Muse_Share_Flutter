@@ -21,4 +21,38 @@ class PostWebService {
       return null;
     }
   }
+
+  Future<List<Post>> fetchPostsForUser(int user_id) async {
+    String url =AppConfig.URL_USER_POSTS;
+    final response = await http.get(url + user_id.toString());
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<Post> posts = body
+          .map(
+            (dynamic item) => Post.fromJson(item),
+      ).toList();
+      print(posts[0].user.username);
+      return posts;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return null;
+    }
+  }
+
+  Future<List<Post>> likePost(int post_id, int user_id) async {
+    String url =AppConfig.URL_USER_POSTS;
+    final response = await http.get(url + user_id.toString());
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<Post> posts = body
+          .map(
+            (dynamic item) => Post.fromJson(item),
+      ).toList();
+      print(posts[0].user.username);
+      return posts;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return null;
+    }
+  }
 }

@@ -27,7 +27,8 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     service = new PostWebService();
-    service.fetchPosts(1); // do something with this data
+    // do something with this data : service.fetchPosts(1);
+    // do something with this data: service.fetchPostsForUser(4);
   }
 
 
@@ -48,6 +49,8 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Failed to load album');
     }
   }
+
+
 
 
 
