@@ -77,5 +77,17 @@ class UserWebService {
     }
   }
 
+  Future<User> findOne(int id) async {
+    String url = AppConfig.URL_FIND_ONE;
+    final response = await http.get(url + id.toString());
+    if (response.statusCode == 200) {
+      dynamic body = jsonDecode(response.body);
+      return User.fromJson(body);
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return null;
+    }
+  }
+
 
 }
