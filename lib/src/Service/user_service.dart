@@ -39,4 +39,55 @@ class UserWebService {
     }
   }
 
+  Future<bool> followUser(int user_id, int followed_user_id) async {
+    String url = AppConfig.URL_FOLLOW;
+    final response = await http.post(url + user_id.toString() + "/" + followed_user_id.toString());
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return false;
+    }
   }
+
+  Future<bool> unfollowUser(int user_id, int followed_user_id) async {
+    String url = AppConfig.URL_UNFOLLOW;
+    final response = await http.delete(url + user_id.toString() + "/" + followed_user_id.toString());
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return false;
+    }
+  }
+
+  Future<List<User>> searchUser(String param) async {
+    String url = AppConfig.URL_SEARCH;
+    final response = await http.get(url + param);
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<User> users = body
+          .map(
+            (dynamic item) => User.fromJsonArray(item),
+      ).toList();
+      return users;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return null;
+    }
+  }
+
+  Future<User> findOne(int id) async {
+    String url = AppConfig.URL_FIND_ONE;
+    final response = await http.get(url + id.toString());
+    if (response.statusCode == 200) {
+      dynamic body = jsonDecode(response.body);
+      return User.fromJson(body);
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return null;
+    }
+  }
+
+
+}
