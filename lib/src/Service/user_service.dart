@@ -52,7 +52,7 @@ class UserWebService {
 
   Future<bool> unfollowUser(int user_id, int followed_user_id) async {
     String url = AppConfig.URL_UNFOLLOW;
-    final response = await http.post(url + user_id.toString() + "/" + followed_user_id.toString());
+    final response = await http.delete(url + user_id.toString() + "/" + followed_user_id.toString());
     if (response.statusCode == 204) {
       return true;
     } else {
