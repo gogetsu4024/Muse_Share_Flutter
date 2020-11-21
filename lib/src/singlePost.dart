@@ -32,15 +32,17 @@ class _SinglePostPageeState extends State<SinglePostPage> {
   String actualComment= "insert comment here !";
   TextEditingController commentController;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("yo");
+    commentController = new TextEditingController();
+  }
+
 
 
   Widget buildSingleComment(Comment comment){
-    @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-      commentController = new TextEditingController();
-    }
 
     return Column(
       children: <Widget>[
@@ -291,8 +293,8 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                 textColor: Colors.white,
                 color: Colors.grey,
                 onPressed: () {
-                  //print(commentController.text);
-                  //service.addComment(content, post_id, user_id)
+                  print(commentController.text);
+                  service.addComment(commentController.text, card.id, _instance.user.user_id);
                   // Respond to button press
                 },
               ),
