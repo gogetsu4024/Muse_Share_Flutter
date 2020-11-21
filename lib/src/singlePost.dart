@@ -28,7 +28,8 @@ class _SinglePostPageeState extends State<SinglePostPage> {
   List<Comment> fetchedComments = [];
   PostWebService service= new PostWebService();
   Singleton _instance = Singleton.getState();
-
+  bool comment= false;
+  String actualComment= "insert comment here !";
 
 
 
@@ -167,7 +168,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
               ,
               title:  Text(card.trackName,style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
               subtitle: Container(
-                  margin: EdgeInsets.only(top: 20),
+                  margin: EdgeInsets.only(top: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -224,7 +225,11 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                       ),
                     ),
                     Padding(padding: EdgeInsets.symmetric(horizontal: 50,vertical: 20)),
-                    Text.rich(
+                    GestureDetector(
+                      onTap: (){setState(() {
+                        comment=!comment;
+                      });},
+                      child: Text.rich(
                       TextSpan(
                         style: TextStyle(
                           fontSize: 20,
@@ -241,12 +246,13 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                           ),
                         ],
                       ),
-                    )
+                    ),)
+
 
                   ],
                 )
             ),
-            Padding(padding: EdgeInsets.symmetric(vertical: 10), child:ListTile(
+            comment?Padding(padding: EdgeInsets.symmetric(vertical: 5), child:ListTile(
               leading: ClipOval(
                   child:Container(
                       width: 60,
@@ -270,8 +276,17 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                   labelText: 'insert comment here !',
                 ),
               ),
+              trailing:  RaisedButton(
+                child: Text('add',style: TextStyle(fontSize: 12),),
+                textColor: Colors.white,
+                color: Colors.grey,
+                onPressed: () {
+                  // Respond to button press
+                },
+              ),
             )
-            )          ],
+            ):Container()
+          ],
         ),
       );
 
