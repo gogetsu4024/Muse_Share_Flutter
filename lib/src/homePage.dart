@@ -248,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                         Icon(Icons.error),
                   )
                   ,
-                  title:  Text(card.trackName,style: TextStyle(fontSize: 18,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
+                  title:  Text(card.trackName,style: TextStyle(fontSize: 16,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
                   subtitle: Container(
                       margin: EdgeInsets.only(top: 20),
                       child: Row(
