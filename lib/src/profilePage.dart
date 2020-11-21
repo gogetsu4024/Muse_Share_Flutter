@@ -11,6 +11,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_login_signup/src/Service/post_service.dart';
 import 'Models/User.dart';
 import 'Session/Singleton.dart';
+import 'followers.dart';
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key}) : super(key: key);
 
@@ -40,69 +41,69 @@ class _ProfilePageState extends State<ProfilePage> {
             future: service.fetchPostsForUser(user.user_id),
             builder: (context, snapshot) {
               if (snapshot.hasData){
-              if (view == "grid") {
-                // build the grid
-                return GridView.count(
-                    crossAxisCount: 3,
-                    childAspectRatio: 1.0,
+                if (view == "grid") {
+                  // build the grid
+                  return GridView.count(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1.0,
 //                    padding: const EdgeInsets.all(0.5),
-                    mainAxisSpacing: 1.5,
-                    crossAxisSpacing: 1.5,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: snapshot.data.map((Post post) {
-                      return GridTile(child: ImageTile(post));
-                    }).toList());
-              }
-              else if (view == "feed") {
-                return Column(
-                    children: snapshot.data.map((Post post) {
-                      return Card(
-                          child : Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20,horizontal: 10),
-                              child: GestureDetector(
-                                onDoubleTap: () => {Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SinglePostPage(info: post),
+                      mainAxisSpacing: 1.5,
+                      crossAxisSpacing: 1.5,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: snapshot.data.map((Post post) {
+                        return GridTile(child: ImageTile(post));
+                      }).toList());
+                }
+                else if (view == "feed") {
+                  return Column(
+                      children: snapshot.data.map((Post post) {
+                        return Card(
+                            child : Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20,horizontal: 10),
+                                child: GestureDetector(
+                                  onDoubleTap: () => {Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SinglePostPage(info: post),
+                                    ),
+                                  )
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: <Widget>[
+                                      CachedNetworkImage(
+                                        imageUrl: AppConfig.TRACK_URL + post.iconUrl,
+                                        fit: BoxFit.fitWidth,
+                                        placeholder: (context, url) =>
+                                            Image(
+                                                fit: BoxFit.fill,
+                                                image: AssetImage('assets/soundcloud.png',)
+                                            ),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
+                                      ),
+                                      post.id == 0
+                                          ? Positioned(
+                                        child: Container(
+                                          width: 100,
+                                          height: 100,
+                                          child: Opacity(
+                                              opacity: 0.85,
+                                              child: FlareActor("assets/flare/Like.flr",
+                                                animation: "Like",
+                                              )),
+                                        ),
+                                      )
+                                          : Container()
+                                    ],
                                   ),
                                 )
-                                },
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: <Widget>[
-                                    CachedNetworkImage(
-                                      imageUrl: AppConfig.TRACK_URL + post.iconUrl,
-                                      fit: BoxFit.fitWidth,
-                                      placeholder: (context, url) =>
-                                          Image(
-                                              fit: BoxFit.fill,
-                                              image: AssetImage('assets/soundcloud.png',)
-                                          ),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
-                                    ),
-                                    post.id == 0
-                                        ? Positioned(
-                                      child: Container(
-                                        width: 100,
-                                        height: 100,
-                                        child: Opacity(
-                                            opacity: 0.85,
-                                            child: FlareActor("assets/flare/Like.flr",
-                                              animation: "Like",
-                                            )),
-                                      ),
-                                    )
-                                        : Container()
-                                  ],
-                                ),
-                              )
-                          )
+                            )
 
-                      );
-                    }).toList());
-              }
+                        );
+                      }).toList());
+                }
               }
               else {
                 return Container(
@@ -232,8 +233,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     buildStatColumn("posts", user.postsCount != null ? user.postsCount : 0),
-                                    buildStatColumn("followers", user.followersCount != null ? user.followersCount : 0),
-                                    buildStatColumn("following", user.followingCount != null ? user.followingCount : 0),
+                                    GestureDetector(
+                                        onTap:(){
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => FollowersAndFollowing(),
+                                            ),
+                                          );
+                                        },
+                                        child:buildStatColumn("followers", user.followersCount != null ? user.followersCount : 0)),
+                                    GestureDetector(
+                                        onTap:(){
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => FollowersAndFollowing(),
+                                            ),
+                                          );
+                                        },
+                                        child:buildStatColumn("following", user.followingCount != null ? user.followingCount : 0))
+                                    ,
                                   ],
                                 ),
                                 Row(
@@ -267,10 +287,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),),
-                buildUserPosts()
+              buildUserPosts()
             ],
           )
-  );
+      );
 
   @override
   Widget build(BuildContext context) {

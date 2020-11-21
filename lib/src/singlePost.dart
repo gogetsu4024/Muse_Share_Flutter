@@ -8,11 +8,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'Config/AppConfig.dart';
 import 'Models/Comment.dart';
 import 'package:bubble/bubble.dart';
-
+import 'package:flutter_login_signup/src/Config/AppConfig.dart';
+import 'package:flutter_login_signup/src/Service/post_service.dart';
 import 'Models/Post.dart';
 
 class SinglePostPage extends StatefulWidget {
-  var info;
+  Post info;
   SinglePostPage({Key key,@required this.info}) : super(key: key);
 
 
@@ -24,34 +25,11 @@ class SinglePostPage extends StatefulWidget {
 class _SinglePostPageeState extends State<SinglePostPage> {
   bool didFetchComments = false;
   List<Comment> fetchedComments = [];
-
-
-  Future<List<Comment>> fetchComments() async {
-    final response = await http.get('https://jsonplaceholder.typicode.com/comments?_start=0&_limit=10');
-    print(response);
-    if (response.statusCode == 200) {
-
-      List<dynamic> body = jsonDecode(response.body);
-      List<Comment> posts = body
-          .map(
-            (dynamic item) => Comment.fromJson(item),
-      ).toList();
-      return posts;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
-  }
+  PostWebService service= new PostWebService();
 
 
 
-  Future<List<Comment>> getComments() async {
-    List<Comment> comments = [];
 
-    comments = await fetchComments();
-    return comments;
-  }
 
   Widget buildSingleComment(Comment comment){
     return Column(
@@ -72,7 +50,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                   width: 60,
                   height: 60,
                   child:CachedNetworkImage(
-                    imageUrl: 'https://images.genius.com/00848f3bc658466a2cf7cde003aded38.500x500x1.jpg',
+                    imageUrl: AppConfig.PROFILE_IMAGE_URL + comment.user.profileImageUrl,
                     fit: BoxFit.fill,
                     placeholder: (context, url) =>
                         Image(
@@ -94,7 +72,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
   Widget buildComments() {
     if (this.didFetchComments == false){
       return FutureBuilder<List<Comment>>(
-          future: getComments(),
+          future: service.fetchCommentsForPost(widget.info.id),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Container(
@@ -102,6 +80,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                   child: CircularProgressIndicator());
             }
             else{
+              print(snapshot.data);
               this.didFetchComments = true;
               this.fetchedComments = snapshot.data;
               return ListView.builder(
@@ -187,12 +166,12 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        '0 Likes',
+                        card.likesCount.toString() + ' Likes',
                         style: TextStyle(fontSize: 16,color: Colors.blue.withOpacity(0.6)),
                       ),
                       Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
                       Text(
-                        '0 Comments',
+                        card.commentsCount.toString() + ' Comments',
                         style: TextStyle(fontSize: 16,color: Colors.blue.withOpacity(0.6)),
                       )
 

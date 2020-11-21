@@ -42,6 +42,7 @@ class MiniAudioPlayer extends StatefulWidget {
   @override
   _MiniAudioPlayerState createState() => new _MiniAudioPlayerState();
 
+
 }
 
 class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
@@ -67,10 +68,11 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
   StreamSubscription _positionSubscription;
   StreamSubscription _audioPlayerStateSubscription;
 
+
+
   @override
   void initState() {
     super.initState();
-    print("yo");
     initAudioPlayer();
     _fetchSongDataFromWeb();
   }
@@ -107,7 +109,6 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
   }
 
   Future play() async {
-    _fetchSongDataFromWeb();
     await audioPlayer.play(newSongUrl);
     setState(() {
       playerState = PlayerState.playing;
@@ -174,6 +175,8 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
   @override
   Widget build(BuildContext context) {
     Size size = new Size(MediaQuery.of(context).size.width, 80.0);
+
+    _fetchSongDataFromWeb();
 
     Widget _buildWave(int x, int y, int secs) {
       return Padding(

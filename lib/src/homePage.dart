@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_login_signup/src/Config/AppConfig.dart';
 import 'package:flutter_login_signup/src/Service/post_service.dart';
 import 'Models/Post.dart';
+import 'Models/User.dart';
 import 'data.dart';
 import 'singlePost.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -68,65 +69,35 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-  Future<List<Comment>> getLikesApiCall() async {
-    final response = await http.get('https://jsonplaceholder.typicode.com/comments?_start=0&_limit=10');
-    print(response);
-    if (response.statusCode == 200) {
-
-      List<dynamic> body = jsonDecode(response.body);
-      List<Comment> posts = body
-          .map(
-            (dynamic item) => Comment.fromJson(item),
-      ).toList();
-      return posts;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
-  }
 
 
 
 
 
-  Future<List<Comment>> getAllLikes() async {
-    List<Comment> comments = [];
-
-    comments = await getLikesApiCall();
-    return comments;
-  }
 
 
-  Widget _buildAllLikes(){
-    return FutureBuilder<List<Comment>>(
-        future: getAllLikes(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Container(
-                width: 400,
-                alignment: FractionalOffset.center,
-                child: CircularProgressIndicator());
-          }
-          else{
-            return Container(width : 400,child:ListView.builder(
-              shrinkWrap: true,
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _buildSingleLiker(snapshot.data[index]);              },
-            )
+  Widget _buildAllLikes(List<User> likes){
+    return ListView.builder(
+        itemCount:  likes.length,
+        itemBuilder : (context, index) {
+          return
+            Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Expanded(
+                      child: _buildSingleLiker(likes[index])
+                  )]
             );
-          }
         });
   }
-  Widget _buildSingleLiker(Comment comment){
+  Widget _buildSingleLiker(User user){
     return ListTile(
       leading: ClipOval(
           child:Container(
               width: 50,
               height: 50,
               child:CachedNetworkImage(
-                imageUrl: 'https://images.genius.com/00848f3bc658466a2cf7cde003aded38.500x500x1.jpg',
+                imageUrl: AppConfig.PROFILE_IMAGE_URL + user.profileImageUrl,
                 fit: BoxFit.fill,
                 placeholder: (context, url) =>
                     Image(
@@ -138,9 +109,9 @@ class _HomePageState extends State<HomePage> {
               )
           )
       ),
-      title:  Text('gogetsu',style: TextStyle(fontSize: 16,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
+      title:  Text(user.username,style: TextStyle(fontSize: 16,fontFamily: 'rabelo',fontWeight: FontWeight.bold)),
       subtitle: Text(
-        comment.user.username,
+        user.user_firstName + " " + user.user_lastName,
         style: TextStyle(fontSize: 14,color: Colors.grey.withOpacity(0.6)),
       ),
       trailing: Container(
@@ -189,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Divider(thickness: 1.5),
                       Expanded(
-                        child : _buildAllLikes(),
+                        child : _buildAllLikes(post.likes),
                       )
                     ],
                   ),
