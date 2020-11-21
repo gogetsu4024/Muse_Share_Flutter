@@ -45,7 +45,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
               )),
           subtitle: Bubble(
             color: Color.fromRGBO(212, 234, 244, 1.0),
-            child: Text(comment.content, style: TextStyle(fontSize: 11.0)),
+            child: Padding(padding:EdgeInsets.symmetric(vertical: 10),child:Text(comment.content, style: TextStyle(fontSize: 11.0))),
           ),
           leading: ClipOval(
               child:Container(
@@ -64,6 +64,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                   )
               )
           ),
+          trailing: _instance.user.user_id==comment.user.user_id?IconButton(iconSize:20,onPressed: (){print("yo");},icon: Icon(Icons.delete),):null,
         ),
         Divider(),
       ],
