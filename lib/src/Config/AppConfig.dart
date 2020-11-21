@@ -3,8 +3,11 @@
 class AppConfig{
   static String URL = "http://192.168.1.22:3000";
 
+  /* User urls */
   static String URL_SIGNIN = URL + "/auth/login/";
   static String URL_REGISTER = URL + "/user/";
+  static String URL_FOLLOW = URL + "/user/follow/";
+  static String URL_UNFOLLOW = URL + "/user/unfollow/";
 
   /* Post urls */
   static String URL_ALL_POSTS = URL + "/post/";
