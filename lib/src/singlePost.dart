@@ -11,6 +11,7 @@ import 'package:bubble/bubble.dart';
 import 'package:flutter_login_signup/src/Config/AppConfig.dart';
 import 'package:flutter_login_signup/src/Service/post_service.dart';
 import 'Models/Post.dart';
+import 'Session/Singleton.dart';
 
 class SinglePostPage extends StatefulWidget {
   Post info;
@@ -26,7 +27,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
   bool didFetchComments = false;
   List<Comment> fetchedComments = [];
   PostWebService service= new PostWebService();
-
+  Singleton _instance = Singleton.getState();
 
 
 
@@ -244,8 +245,33 @@ class _SinglePostPageeState extends State<SinglePostPage> {
 
                   ],
                 )
+            ),
+            Padding(padding: EdgeInsets.symmetric(vertical: 10), child:ListTile(
+              leading: ClipOval(
+                  child:Container(
+                      width: 60,
+                      height: 60,
+                      child:CachedNetworkImage(
+                        imageUrl: AppConfig.PROFILE_IMAGE_URL + _instance.user.profileImageUrl,
+                        fit: BoxFit.fill,
+                        placeholder: (context, url) =>
+                            Image(
+                                fit: BoxFit.fill,
+                                image: AssetImage('assets/user-placeholder.png')
+                            ),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.error),
+                      )
+                  )
+              ),
+              subtitle:  TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'insert comment here !',
+                ),
+              ),
             )
-          ],
+            )          ],
         ),
       );
 
