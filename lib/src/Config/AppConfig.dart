@@ -21,7 +21,7 @@ class AppConfig{
   static String URL_POST_COMMENTS = URL + "/comment/find/";
   static String URL_LIKE_COMMENT = URL + "/comment/like/";
   static String URL_DISLIKE_COMMENT = URL + "/comment/dislike/";
-
+  static String URL_ADD_COMMENT = URL + "/comment/";
 
   static String PROFILE_IMAGE_URL = URL + "/profile_images/";
   static String TRACK_URL = URL + "/tracks/";

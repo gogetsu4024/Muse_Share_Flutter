@@ -100,4 +100,14 @@ class PostWebService {
     }
   }
 
+  Future<bool> addComment(String content, int post_id, int user_id) async {
+    String url = AppConfig.URL_DISLIKE_POST;
+    final response = await http.post(url, body: {"content": content, "post_id": post_id, "user_id": user_id});
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return false;
+    }
+  }
 }
