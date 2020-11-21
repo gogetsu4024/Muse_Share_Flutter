@@ -6,6 +6,7 @@ class AppConfig{
   /* User urls */
   static String URL_SIGNIN = URL + "/auth/login/";
   static String URL_REGISTER = URL + "/user/";
+  static String URL_SEARCH = URL + "/user/search/";
   static String URL_FOLLOW = URL + "/user/follow/";
   static String URL_UNFOLLOW = URL + "/user/unfollow/";
 

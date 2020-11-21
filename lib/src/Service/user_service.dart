@@ -61,4 +61,21 @@ class UserWebService {
     }
   }
 
+  Future<List<User>> searchUser(String param) async {
+    String url = AppConfig.URL_SEARCH;
+    final response = await http.get(url + param);
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<User> users = body
+          .map(
+            (dynamic item) => User.fromJsonArray(item),
+      ).toList();
+      return users;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return null;
+    }
   }
+
+
+}
