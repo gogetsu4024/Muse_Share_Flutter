@@ -116,14 +116,21 @@ class _HomePageState extends State<HomePage> {
       ),
       trailing: Container(
           width: 75,
-          child : RaisedButton(
-            child: Text('follow'),
+          child : !_instance.user.following.contains(user)?RaisedButton(
+            child: Text('follow',style: TextStyle(fontSize: 10),),
             textColor: Colors.white,
             color: Color(0xFF6200EE),
             onPressed: () {
               // Respond to button press
             },
-
+          ):
+          RaisedButton(
+            child: Text('followed',style: TextStyle(fontSize: 10),),
+            textColor: Colors.white,
+            color: Colors.grey,
+            onPressed: () {
+              // Respond to button press
+            },
           )
       ),
     );

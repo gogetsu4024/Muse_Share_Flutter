@@ -238,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => FollowersAndFollowing(),
+                                              builder: (context) => FollowersAndFollowing(user : user),
                                             ),
                                           );
                                         },
@@ -248,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => FollowersAndFollowing(),
+                                              builder: (context) => FollowersAndFollowing(user : user),
                                             ),
                                           );
                                         },
