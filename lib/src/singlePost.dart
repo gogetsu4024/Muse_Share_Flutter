@@ -30,10 +30,18 @@ class _SinglePostPageeState extends State<SinglePostPage> {
   Singleton _instance = Singleton.getState();
   bool comment= false;
   String actualComment= "insert comment here !";
+  TextEditingController commentController;
 
 
 
   Widget buildSingleComment(Comment comment){
+    @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      commentController = new TextEditingController();
+    }
+
     return Column(
       children: <Widget>[
         ListTile(
@@ -272,6 +280,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                   )
               ),
               subtitle:  TextField(
+                controller: commentController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'insert comment here !',
@@ -282,6 +291,8 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                 textColor: Colors.white,
                 color: Colors.grey,
                 onPressed: () {
+                  //print(commentController.text);
+                  //service.addComment(content, post_id, user_id)
                   // Respond to button press
                 },
               ),

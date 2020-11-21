@@ -110,4 +110,15 @@ class PostWebService {
       return false;
     }
   }
+
+  Future<bool> removeComment(int comment_id) async {
+    String url = AppConfig.URL_REMOVE_COMMENT;
+    final response = await http.delete(url + comment_id.toString());
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      return false;
+    }
+  }
 }
