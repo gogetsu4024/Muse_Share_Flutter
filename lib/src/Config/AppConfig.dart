@@ -22,6 +22,7 @@ class AppConfig{
   static String URL_LIKE_COMMENT = URL + "/comment/like/";
   static String URL_DISLIKE_COMMENT = URL + "/comment/dislike/";
   static String URL_ADD_COMMENT = URL + "/comment/";
+  static String URL_REMOVE_COMMENT = URL + "/comment/delete/";
 
   /* Chat urls */
   static String URL_USER_CONVERSATIONS = URL + "/conversation/find/";
