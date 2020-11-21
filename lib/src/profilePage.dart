@@ -42,6 +42,12 @@ class _ProfilePageState extends State<ProfilePage> {
             builder: (context, snapshot) {
               if (snapshot.hasData){
                 if (view == "grid") {
+                  if (snapshot.data.length==0)
+                    return  Image(
+                        fit: BoxFit.fill,
+                        image: AssetImage('assets/no_comments.png',)
+                    );
+
                   // build the grid
                   return GridView.count(
                       crossAxisCount: 3,
@@ -56,6 +62,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       }).toList());
                 }
                 else if (view == "feed") {
+                  if (snapshot.data.length==0)
+                    return  Image(
+                        fit: BoxFit.fill,
+                        image: AssetImage('assets/no_comments.png',)
+                    );
+
                   return Column(
                       children: snapshot.data.map((Post post) {
                         return Card(

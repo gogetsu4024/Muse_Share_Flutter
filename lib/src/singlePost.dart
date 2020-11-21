@@ -80,14 +80,19 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                   child: CircularProgressIndicator());
             }
             else{
-              print(snapshot.data);
               this.didFetchComments = true;
               this.fetchedComments = snapshot.data;
+              if (snapshot.data.length==0)
+                return  Image(
+                    fit: BoxFit.fill,
+                    image: AssetImage('assets/no_comments.png',)
+                );
               return ListView.builder(
                 shrinkWrap: true,
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return buildSingleComment(snapshot.data[index]);              },
+                  return buildSingleComment(snapshot.data[index]);
+                },
               );
             }
           });

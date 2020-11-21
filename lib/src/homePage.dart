@@ -25,7 +25,6 @@ class HomePage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _HomePageState extends State<HomePage> {
-  Song song= new Song(category: "none", image: "https://i1.sndcdn.com/artworks-000245530126-40dfig-t500x500.jpg", name: "Cardi B is the bomb", artist: 'test', url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
   var playing =false;
   var cards = Data.getData;
   PostWebService service;
@@ -116,7 +115,7 @@ class _HomePageState extends State<HomePage> {
       ),
       trailing: Container(
           width: 75,
-          child : !_instance.user.following.contains(user)?RaisedButton(
+          child : user.user_id!=_instance.user.user_id?!findFollowOrFollowed(user,_instance.user.following)?RaisedButton(
             child: Text('follow',style: TextStyle(fontSize: 10),),
             textColor: Colors.white,
             color: Color(0xFF6200EE),
@@ -131,9 +130,16 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               // Respond to button press
             },
-          )
+          ):null
       ),
     );
+  }
+  bool findFollowOrFollowed(User user,List<User> following){
+    for(User u in following){
+      if (u.user_id==user.user_id)
+        return true;
+    }
+    return false;
   }
 
   Widget _buildLikesPopUp(Post post){
@@ -261,20 +267,13 @@ class _HomePageState extends State<HomePage> {
                   trailing: InkWell(
                       child:Icon(Icons.cloud_download,size: 40,),
                       onTap: () {
-                        setState(() {
-                          playing=true;
-                          song.name=card.trackName;
-                          song.image=AppConfig.TRACK_URL + card.iconUrl;
-                          song.url= AppConfig.TRACK_URL + card.trackUrl;
-                          MiniAudioPlayer.songUrl = AppConfig.TRACK_URL + card.trackUrl;
 
-                        });
-                        /* Navigator.push(
+                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AudioApp(song),
+                            builder: (context) => AudioApp(new Song(category: "none", image: AppConfig.TRACK_URL + card.iconUrl, name: card.description, artist: card.trackName, url: AppConfig.TRACK_URL + card.trackUrl)),
                           ),
-                        );*/
+                        );
                       }
 
                   ),
@@ -364,7 +363,7 @@ class _HomePageState extends State<HomePage> {
             Container(
               padding: EdgeInsets.only(top: 20),
               height: 124,
-              child: Card(child:MiniAudioPlayer(song))
+              child: Card(child:MiniAudioPlayer(new Song(category: "none", image: "https://i1.sndcdn.com/artworks-000245530126-40dfig-t500x500.jpg", name: "Cardi B is the bomb", artist: 'test', url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")))
               ,
             )
             ,

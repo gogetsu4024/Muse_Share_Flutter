@@ -26,7 +26,7 @@ class _FollowersAndFollowingState extends State<FollowersAndFollowing> {
   }
 
 
-  Widget _buildAllFollowersAndFollowing(List<User> followers,String type){
+  Widget _buildAllFollowersAndFollowing(List<User> followers){
     return ListView.builder(
         itemCount:  followers.length,
         itemBuilder : (context, index) {
@@ -35,12 +35,12 @@ class _FollowersAndFollowingState extends State<FollowersAndFollowing> {
                 direction: Axis.horizontal,
                 children: [
                   Expanded(
-                      child: _buildSingleFollower(followers[index],type)
+                      child: _buildSingleFollower(followers[index])
                   )]
             );
         });
   }
-  Widget _buildSingleFollower(User user,String type){
+  Widget _buildSingleFollower(User user){
     return ListTile(
       leading: ClipOval(
           child:Container(
@@ -66,29 +66,13 @@ class _FollowersAndFollowingState extends State<FollowersAndFollowing> {
       ),
       trailing: Container(
           width: 75,
-          child : type =="followers"?!_instance.user.followers.contains(user)?RaisedButton(
+          child : !findFollowOrFollowed(user,_instance.user.followers)?RaisedButton(
             child: Text('follow',style: TextStyle(fontSize: 10),),
             textColor: Colors.white,
             color: Color(0xFF6200EE),
             onPressed: () {
               // Respond to button press
             },
-          ):
-          RaisedButton(
-            child: Text('followed',style: TextStyle(fontSize: 10),),
-            textColor: Colors.white,
-            color: Colors.grey,
-            onPressed: () {
-              // Respond to button press
-            },
-          ):!_instance.user.following.contains(user)?RaisedButton(
-            child: Text('follow',style: TextStyle(fontSize: 10),),
-            textColor: Colors.white,
-            color: Color(0xFF6200EE),
-            onPressed: () {
-              // Respond to button press
-            },
-
           ):
           RaisedButton(
             child: Text('followed',style: TextStyle(fontSize: 10),),
@@ -100,6 +84,13 @@ class _FollowersAndFollowingState extends State<FollowersAndFollowing> {
           )
       ),
     );
+  }
+  bool findFollowOrFollowed(User user,List<User> following){
+    for(User u in following){
+      if (u.user_id==user.user_id)
+        return true;
+    }
+    return false;
   }
 
 
@@ -145,13 +136,13 @@ class _FollowersAndFollowingState extends State<FollowersAndFollowing> {
             children: [
               Column(children: [
                 Expanded(
-                  child : _buildAllFollowersAndFollowing(widget.user.followers,"followers"),
+                  child : _buildAllFollowersAndFollowing(widget.user.followers),
                 )
 
               ],),
               Column(children: [
                 Expanded(
-                  child : _buildAllFollowersAndFollowing(widget.user.following,"following"),
+                  child : _buildAllFollowersAndFollowing(widget.user.following),
                 )
 
               ],),
