@@ -74,7 +74,7 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                   )
               )
           ),
-          trailing: _instance.user.user_id==comment.user.user_id?IconButton(iconSize:20,onPressed: (){print("yo");},icon: Icon(Icons.delete),):null,
+          trailing: _instance.user.user_id==comment.user.user_id?IconButton(iconSize:20,onPressed: (){service.removeComment(comment.id);},icon: Icon(Icons.delete),):null,
         ),
         Divider(),
       ],
@@ -293,7 +293,6 @@ class _SinglePostPageeState extends State<SinglePostPage> {
                 textColor: Colors.white,
                 color: Colors.grey,
                 onPressed: () {
-                  print(commentController.text);
                   service.addComment(commentController.text, card.id, _instance.user.user_id);
                   // Respond to button press
                 },

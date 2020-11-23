@@ -101,8 +101,8 @@ class PostWebService {
   }
 
   Future<bool> addComment(String content, int post_id, int user_id) async {
-    String url = AppConfig.URL_DISLIKE_POST;
-    final response = await http.post(url, body: {"content": content, "post_id": post_id, "user_id": user_id});
+    String url = AppConfig.URL_ADD_COMMENT;
+    final response = await http.post(url, body: {"content": content, "post_id": post_id.toString(), "user_id": user_id.toString()});
     if (response.statusCode == 204) {
       return true;
     } else {
